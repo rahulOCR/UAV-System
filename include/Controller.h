@@ -19,6 +19,7 @@ public:
     void set_Ki(float newKi) { ki = newKi; }
     void set_Kd(float newKd) { kd = newKd; }
     void set_Ilimit(float newIlimit) { integralLimit = newIlimit; }
+    void set_target(float new_target) { target = new_target; }
 
 
     // Getter methods
@@ -26,5 +27,6 @@ public:
     float get_Ki() const { return ki; }
     float get_Kd() const { return kd; }
     float get_Ilimit() const { return integralLimit; }
+    float get_target() const { return target; }
 
 };

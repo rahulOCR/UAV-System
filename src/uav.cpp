@@ -23,19 +23,37 @@ uav::uav(int port_in, int port_out, double kp, double ki, double kd, double targ
 
 void uav::update_AHRS()
 {
-    _roll = ret->gyro.getX() * 0.97  + ret->accel_body.getX() * 0.03;
-    _pitch = ret->gyro.getY() * 0.97  + ret->accel_body.getY() * 0.03;
-    _yaw = ret->gyro.getZ() * 0.97  + ret->accel_body.getY() * 0.03;
-    _alt = ret->position.getZ();
+    _roll = ret->gyro.getX();
+    _pitch = ret->gyro.getY();
+    _yaw = ret->gyro.getZ();
+    _alt = ret->position.getZ() * (-1);
+    
+
 }
 
 
-void uav::update()
+void uav::update(std::ofstream &outputFile)
 {
+    ret->update(inp);
     update_AHRS();
-    pid_roll->calculate(_roll);
-    pid_pitch->calculate(_pitch);
+    double pid_output_roll = pid_roll->calculate(_roll);
+    double pid_output_pitch = pid_pitch->calculate(_pitch);
     pid_yaw->calculate(_yaw);
+
+    double pid_output_alt = pid_alt->calculate(_alt);
+    // printf("%f %f\n", ret->gyro.getX(), ret->gyro.getY());
+    
+    inp.servos[0] = 1580 + (int16_t)pid_output_alt;// - (int16_t)pid_output_roll + (int16_t)pid_output_pitch;
+    inp.servos[1] = 1580 + (int16_t)pid_output_alt;// + (int16_t)pid_output_roll - (int16_t)pid_output_pitch;
+    inp.servos[2] = 1580 + (int16_t)pid_output_alt ;//+ (int16_t)pid_output_roll + (int16_t)pid_output_pitch;
+    inp.servos[3] = 1580 + (int16_t)pid_output_alt ;//- (int16_t)pid_output_roll - (int16_t)pid_output_pitch;
+        
+
+    
+    
+    
+    
+    outputFile << std::fixed << std::setprecision(3) << _alt <<" " << pid_output_alt <<std::endl;
 
   ret->send_servos(inp);
 }

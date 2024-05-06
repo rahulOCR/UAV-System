@@ -28,7 +28,29 @@ int main()
         return 1; // Return an error code
     }
 
-    // outputFile << std::fixed << std::setprecision(3) << h->position.getX() <<" " << h->position.getY() <<" " << h->position.getZ() <<" " <<out << std::endl;
+    uav_system->pid_alt->set_target(100.0f);
+    uav_system->pid_alt->set_Kd(0.0f);
+    uav_system->pid_alt->set_Ki(0.00f);
+    uav_system->pid_alt->set_Kp(16.0f);
+
+    uav_system->pid_roll->set_target(0.0f);
+    uav_system->pid_roll->set_Kd(1.0f);
+    uav_system->pid_roll->set_Ki(0.00f);
+    uav_system->pid_roll->set_Kp(1.0f);
+
+    uav_system->pid_pitch->set_target(0.0f);
+    uav_system->pid_pitch->set_Kd(4.0f);
+    uav_system->pid_pitch->set_Ki(0.00f);
+    uav_system->pid_pitch->set_Kp(1.0f);
+
+    
+    
+    while (1)
+    {
+        uav_system->update(outputFile);
+        
+    }
+    
 
     outputFile.close();
     return 0;

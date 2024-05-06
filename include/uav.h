@@ -7,7 +7,7 @@
 class uav
 {
     public:
-        void update();
+        void update(std::ofstream &outputFile);
         uav(int port_in, int port_out, double kp, double ki, double kd, double target, double integralLimit);
         PID *pid_roll, *pid_pitch, *pid_yaw, *pid_alt;
 
